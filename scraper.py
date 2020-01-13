@@ -1,5 +1,6 @@
 import tweepy
 import re
+import csv
 
 # Initial setup
 consumer_key=""
@@ -13,6 +14,8 @@ api = tweepy.API(auth)
 
 incidents = []
 # Iterate though all of the tweets from northants fire
+csv_file = open("WhatDoFiremenDo.csv", "w", newline="", encoding="utf")
+csv_writer = csv.writer(csv_file)
 for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", include_entities=True).items()):
     # init
     text = tweet.text.upper()
@@ -24,7 +27,7 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
     time = re.findall("[0-9][0-9][:][0-9][0-9]", text)
     # Find word with #s in (They always do #Location)
     location = re.findall("#\S+", text)
-    source = tweet.entities["urls"]
+    source = f"https://twitter.com/{tweet.user.screen_name}/status/{tweet.id}"
 
     if not time:
         # Not tweeting about an incident
@@ -44,10 +47,14 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
         incident_type.append("Police")
     if "FIRE" in text or "SMOKE" in text:
         incident_type.append("Fire")
+    if "SMALL TOOLS" in text:
+        incident_type.append("Forced entry")
 
-    incidents.append([date, time, incident_type, location, source])
-
-    if x == 30:
+    #incidents.append([date, time, incident_type, location, source])
+    if date[:4] == 2017:
         break
-for incident in incidents:
-    print(incident)
+    csv_writer.writerow([date, time, incident_type, location, source])
+
+# for incident in incidents:
+#     print(incident)
+csv_file.close()
