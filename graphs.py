@@ -51,22 +51,21 @@ plt.ylabel = "Incidents"
 plt.xlabel = "Time (24h)"
 
 # The position of the bars on the x-axis
-r = [x for x in range(0, 25)]
-
+r = [x for x in range(0, 24)]
 # Generate all of the bars
-fire = no_info = false_alarm = car = ambulance = police = forced_entry = []
+fire,  no_info,  false_alarm,  car,  ambulance,  police, forced_entry = [], [], [], [], [], [], []
 
 for time in Dict.keys():
     fire.append(Dict[time]["Fire"])
-    no_info.append(Dict[time][""])
+    no_info.append(Dict[time]["No_Info"])
     false_alarm.append(Dict[time]["False Alarm"])
     car.append(Dict[time]["Car"])
     ambulance.append(Dict[time]["Ambulance"])
     police.append(Dict[time]["Police"])
     forced_entry.append(Dict[time]["Forced entry"])
 
-# Heights of bar1+bar2
-
+print(fire)
+print(len(no_info))
 # Names of the bars
 names = ["fire", "no_info", "false_alarm", "car", "ambulance", "police", "forced_entry"]
 
