@@ -3,14 +3,14 @@ import csv
 from collections import Counter
 import numpy as np
 
+list_of_times = [(str(0) + str(time)) if len(str(time)) < 2 else str(time) for time in range(0, 24)]
+Dict = {time: [] for time in list_of_times}
+
 with open("WhatDoFiremenDo.csv", "r", newline="", encoding="utf") as csv_file:
-    Dict = {}
     count = Counter()
     for x, row in enumerate(csv.reader(csv_file, delimiter="%")):
         # If time not in dict of "time:incidents" already, add it
         # row[1][2:4] = First two in XX:YY
-        if row[1][2:4] not in Dict.keys():
-            Dict[row[1][2:4]] = []
 
         for incidents in row[2].split("%"):
             for incident in incidents.split(","):
@@ -19,7 +19,6 @@ with open("WhatDoFiremenDo.csv", "r", newline="", encoding="utf") as csv_file:
                 # Add all of the incidents to the Dict of "TIME:[INCIDENTS]"
                 Dict[row[1][2:4]].append(incident)
 
-list_of_times = []
 list_of_incident_types = []
 incident_occurrences = Counter()
 
