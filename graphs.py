@@ -56,16 +56,15 @@ r = [x for x in range(0, 24)]
 fire,  no_info,  false_alarm,  car,  ambulance,  police, forced_entry = [], [], [], [], [], [], []
 
 for time in Dict.keys():
-    fire.append(Dict[time]["Fire"])
-    no_info.append(Dict[time]["No_Info"])
-    false_alarm.append(Dict[time]["False Alarm"])
-    car.append(Dict[time]["Car"])
-    ambulance.append(Dict[time]["Ambulance"])
-    police.append(Dict[time]["Police"])
-    forced_entry.append(Dict[time]["Forced entry"])
+    fire.append(int(Dict[time]["Fire"]))
+    no_info.append(int(Dict[time]["No_Info"]))
+    false_alarm.append(int(Dict[time]["False Alarm"]))
+    car.append(int(Dict[time]["Car"]))
+    ambulance.append(int(Dict[time]["Ambulance"]))
+    police.append(int(Dict[time]["Police"]))
+    forced_entry.append(int(Dict[time]["Forced entry"]))
 
-print(fire)
-print(len(no_info))
+
 # Names of the bars
 names = ["fire", "no_info", "false_alarm", "car", "ambulance", "police", "forced_entry"]
 
@@ -73,22 +72,22 @@ names = ["fire", "no_info", "false_alarm", "car", "ambulance", "police", "forced
 plt.bar(r, fire)
 plt.bar(r, no_info, bottom=fire, color="#111111")
 
-bars = np.add(fire, no_info).tolist
+bars = np.add(fire, no_info).tolist()
 plt.bar(r, false_alarm, bottom=bars, color="#111121")
 
-bars = np.add(bars, false_alarm).tolist
+bars = np.add(bars, false_alarm).tolist()
 plt.bar(r, car, bottom=bars, color="#113111")
 
-bars = np.add(bars, car).tolist
+bars = np.add(bars, car).tolist()
 plt.bar(r, ambulance, bottom=bars, color="#161111")
 
-bars = np.add(bars, ambulance).tolist
+bars = np.add(bars, ambulance).tolist()
 plt.bar(r, police, bottom=bars, color="#111911")
 
-bars = np.add(bars, police).tolist
+bars = np.add(bars, police).tolist()
 plt.bar(r, forced_entry, bottom=bars, color="#11d111")
 
 
-plt.xticks(r, names)
+plt.xticks(r, list_of_times)
 plt.show()
 
