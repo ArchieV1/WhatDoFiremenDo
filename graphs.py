@@ -41,7 +41,6 @@ for time in Dict.keys():
     for incident_type in list_of_incident_types:
         if incident_type not in Dict[time]:
             Dict[time][incident_type] = 0
-    print(Dict[time])
 
 print(list_of_incident_types)
 print(incident_occurrences)
