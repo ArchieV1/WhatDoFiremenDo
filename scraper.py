@@ -15,7 +15,7 @@ api = tweepy.API(auth)
 incidents = []
 # Iterate though all of the tweets from northants fire
 csv_file = open("WhatDoFiremenDo.csv", "w", newline="", encoding="utf")
-csv_writer = csv.writer(csv_file)
+csv_writer = csv.writer(csv_file, delimiter="%")
 for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", include_entities=True).items()):
     # init
     text = tweet.text.upper()
@@ -33,16 +33,12 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
         # Not tweeting about an incident
         continue
 
-    if "FALSE ALARM" in text or "False" in text:
-        incident_type.append("False")
-    if "EMASNHSTRUST" in text:
+    if "FALSE ALARM" in text or "FALSE" in text:
+        incident_type.append("False Alarm")
+    if "EMASNHSTRUST" in text or "EMAS_CFR" in text:
         incident_type.append("Ambulance")
     if "RTC" in text or "VEHICLE" in text or "CAR" in text:
         incident_type.append("Car")
-    if "CONTROLLED" in text:
-        incident_type.append("Controlled")
-    if "EMAS_CFR" in text:
-        incident_type.append("CRT")
     if "NORTHANTSPOLICE" in text:
         incident_type.append("Police")
     if "FIRE" in text or "SMOKE" in text:
@@ -50,10 +46,11 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
     if "SMALL TOOLS" in text:
         incident_type.append("Forced entry")
 
+    print(incident_type)
     #incidents.append([date, time, incident_type, location, source])
     if date[:4] == 2017:
         break
-    csv_writer.writerow([date, time, incident_type, location, source])
+    csv_writer.writerow([date, time, str(incident_type), location, source])
 
 # for incident in incidents:
 #     print(incident)
