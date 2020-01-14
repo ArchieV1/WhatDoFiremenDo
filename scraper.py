@@ -46,12 +46,9 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
     if "SMALL TOOLS" in text:
         incident_type.append("Forced entry")
 
-    print(incident_type)
-    #incidents.append([date, time, incident_type, location, source])
-    if date[:4] == 2017:
-        break
+    if not incident_type:
+        incident_type = "No_Info"
+
     csv_writer.writerow([date, time, str(incident_type), location, source])
 
-# for incident in incidents:
-#     print(incident)
 csv_file.close()
