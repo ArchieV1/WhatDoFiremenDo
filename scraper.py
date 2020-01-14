@@ -47,7 +47,7 @@ for x, tweet in enumerate(tweepy.Cursor(api.user_timeline, id="northantsfire", i
         incident_type.append("Forced entry")
 
     if not incident_type:
-        incident_type = "No_Info"
+        incident_type.append("No_Info")
 
     csv_writer.writerow([date, time, str(incident_type), location, source])
 
