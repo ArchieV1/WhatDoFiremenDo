@@ -6,14 +6,18 @@ import numpy as np
 with open("WhatDoFiremenDo.csv", "r", newline="", encoding="utf") as csv_file:
     Dict = {}
     count = Counter()
-    for x, row in enumerate(csv.reader(csv_file)):
+    for x, row in enumerate(csv.reader(csv_file, delimiter="%")):
         # If time not in dict of "time:incidents" already, add it
         # row[1][2:4] = First two in XX:YY
         if row[1][2:4] not in Dict.keys():
             Dict[row[1][2:4]] = []
 
-        for incident in row[2]:
-            Dict[row[1][2:4]] += incident
+        for incidents in row[2].split("%"):
+            for incident in incidents.split(","):
+                # Strip the crap
+                incident = incident.strip("[").strip("]").strip("\'").replace("\'", "").strip()
+                # Add all of the incidents to the Dict of "TIME:[INCIDENTS]"
+                Dict[row[1][2:4]].append(incident)
 
 list_of_times = []
 list_of_incident_types = []
@@ -22,9 +26,8 @@ incident_occurrences = Counter()
 for time in Dict.keys():
     list_of_times.append(time)
 
-    #Dict[time] = Dict[time].strip("\"[").strip("]\"").replace("\'", "").replace("[]", "[Unknown]").split("][")
-    #Dict[time] = Counter(Dict[time])
-    # Dict[time] (Where time = 00, 01 etc) is not a counter obj with "Incident type: Int". Incident type can be
+    Dict[time] = Counter(Dict[time])
+    # Dict[time] (Where time = 00, 01 etc) is now a counter obj with "Incident type: Int". Incident type can be
     # multiple incidents separated by a comma eg "'Ambulance, CRT' : Int"
     print(Dict[time])
     # Populate the list of incident types for use when generating graph (To be able to call all of them from the Dict)
