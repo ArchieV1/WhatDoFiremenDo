@@ -29,7 +29,6 @@ for time in Dict.keys():
     Dict[time] = Counter(Dict[time])
     # Dict[time] (Where time = 00, 01 etc) is now a counter obj with "Incident type: Int". Incident type can be
     # multiple incidents separated by a comma eg "'Ambulance, CRT' : Int"
-    print(Dict[time])
     # Populate the list of incident types for use when generating graph (To be able to call all of them from the Dict)
     for incident_type in list(Dict[time]):
         if incident_type not in list_of_incident_types:
@@ -37,6 +36,14 @@ for time in Dict.keys():
             incident_occurrences[incident_type] = Dict[time][incident_type]
         else:
             incident_occurrences[incident_type] += Dict[time][incident_type]
+
+# Make sure each Counter obj has every option (Or the graph doesn't work)
+for time in Dict.keys():
+    for incident_type in list_of_incident_types:
+        if incident_type not in Dict[time]:
+            Dict[time][incident_type] = 0
+    print(Dict[time])
+
 print(list_of_incident_types)
 print(incident_occurrences)
 # Bar chart of incidences/time with incidences grouped by type
@@ -47,18 +54,42 @@ plt.xlabel = "Time (24h)"
 r = [x for x in range(0, 25)]
 
 # Generate all of the bars
-print("\n")
+fire = no_info = false_alarm = car = ambulance = police = forced_entry = []
 
-# for incident_type in list_of_incident_types:
-#     bar_data = []
-#     for time in Dict.keys():
-#         if incident_type in list(Dict[time]):
-#             bar_data.append(Dict[time][incident_type])
-#         else:
-#             bar_data.append(0)
-#     print(incident_type)
-#     print(bar_data)
-#     plt.bar(r, bar_data, width=1)
+for time in Dict.keys():
+    fire.append(Dict[time]["Fire"])
+    no_info.append(Dict[time][""])
+    false_alarm.append(Dict[time]["False Alarm"])
+    car.append(Dict[time]["Car"])
+    ambulance.append(Dict[time]["Ambulance"])
+    police.append(Dict[time]["Police"])
+    forced_entry.append(Dict[time]["Forced entry"])
+
+# Heights of bar1+bar2
+
+# Names of the bars
+names = ["fire", "no_info", "false_alarm", "car", "ambulance", "police", "forced_entry"]
 
 
+plt.bar(r, fire)
+plt.bar(r, no_info, bottom=fire, color="#111111")
+
+bars = np.add(fire, no_info).tolist
+plt.bar(r, false_alarm, bottom=bars, color="#111121")
+
+bars = np.add(bars, false_alarm).tolist
+plt.bar(r, car, bottom=bars, color="#113111")
+
+bars = np.add(bars, car).tolist
+plt.bar(r, ambulance, bottom=bars, color="#161111")
+
+bars = np.add(bars, ambulance).tolist
+plt.bar(r, police, bottom=bars, color="#111911")
+
+bars = np.add(bars, police).tolist
+plt.bar(r, forced_entry, bottom=bars, color="#11d111")
+
+
+plt.xticks(r, names)
 plt.show()
+
